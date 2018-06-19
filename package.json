@@ -1,5 +1,5 @@
 {
-  "name": "e7n-l10n",
+  "name": "e7n-i18n",
   "version": "1.0.0",
   "main": "src/cli.js",
   "license": "MIT",
