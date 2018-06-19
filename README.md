@@ -1,4 +1,4 @@
-# e7n-i18n: Chrome Extension Internationalization
+# e7n: Chrome Extension Internationalization
 
 A tool to auto-populate `_locales/<default_locale>/messages.json` with strings found in a Chrome extension project, and to provide conversion from those strings into localized text.
 
@@ -16,7 +16,7 @@ In HTML files mark tags with a `data-e7n` tag. Such tags should only contain tex
 In JavaScript files use the `tr` function to signify text that is a localizable string. Use string literals or variables that are string literals. (TODO: what if string literals concatted with plus?)
 
 ```javascript
-import { tr } from 'e7n-i18n';
+import { tr } from 'e7n';
 
 const FOO = tr('This is a localized string.');
 ```
@@ -28,7 +28,7 @@ TODO - build this...
 In HTML files, auto-convert your marked tags with the `updateHtml` function:
 
 ```javascript
-import { updateHtml } from 'e7n-i18n';
+import { updateHtml } from 'e7n';
 
 document.addEventListener('DOMContentLoaded', event => {
   updateHtml();
