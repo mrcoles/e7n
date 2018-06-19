@@ -26,7 +26,7 @@ if (tr.name !== constants.FN_NAME) {
 // ## HTML handling
 //
 
-const updateHtml = (attr = constants.ATTR_NAME, context = null) => {
+const updateHtml = (context = null, attr = constants.ATTR_NAME) => {
   context = context || document;
   let elts = context.querySelectorAll(`[${CSS.escape(attr)}]`);
 

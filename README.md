@@ -23,8 +23,6 @@ const FOO = tr('This is a localized string.');
 
 ## Convert strings
 
-TODO - build this...
-
 In HTML files, auto-convert your marked tags with the `updateHtml` function:
 
 ```javascript
@@ -33,6 +31,16 @@ import { updateHtml } from 'e7n';
 document.addEventListener('DOMContentLoaded', event => {
   updateHtml();
 });
+
+const update = () => {
+  fetch('/something')
+    .then(r => r.text())
+    .then(html => {
+      let elt = document.getElementById('something');
+      elt.innerHTML = html;
+      updateHtml(elt);
+    });
+};
 ```
 
 In JavaScript files, the `tr` function will already convert messages for you.
