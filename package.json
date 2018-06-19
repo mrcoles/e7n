@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "main": "src/cli.js",
   "license": "MIT",
+  "bin": {
+    "e7n": "bin/cli.js"
+  },
   "dependencies": {
     "acorn": "^5.7.1",
     "cheerio": "^1.0.0-rc.2",
