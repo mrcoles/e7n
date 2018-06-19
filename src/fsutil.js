@@ -10,6 +10,18 @@ const readFile = (path, options) =>
     )
   );
 
+const readJson = (path, options) => readFile(path, options).then(JSON.parse);
+
+const writeFile = (file, data, options) =>
+  new Promise((resolve, reject) =>
+    fs.writeFile(
+      file,
+      data,
+      options === undefined ? 'utf8' : options,
+      err => (err ? reject(err) : resolve())
+    )
+  );
+
 const glob = (pattern, options) =>
   new Promise((resolve, reject) => {
     _glob(
@@ -23,4 +35,4 @@ const glob = (pattern, options) =>
 // ## Exports
 //
 
-module.exports = { glob, readFile };
+module.exports = { readFile, readJson, writeFile, glob };
