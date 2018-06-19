@@ -1,3 +1,4 @@
+const chalk = require('chalk');
 const program = require('commander');
 const version = require('../package.json').version;
 
@@ -10,12 +11,16 @@ program
   .description(
     'collects various strings and updates the locales from a Chrome extension\'s root directory (must contain a "_locales" underneath it), defaults to CWD.'
   )
-  // .option(
-  //   '--root <path>',
-  //   'Root directory, must contain a "_locales" directory (defaults to cwd)'
-  // )
   .option('--src-path <path>', 'Path to source directory (defaults to root)')
-  .action(_handle(build.collect));
+  .action((root, opts) =>
+    build
+      .collect(root, opts)
+      .then(x => {
+        console.log(chalk.bold('\nUpdated default locale file...\n'));
+        console.log(JSON.stringify(x, null, 2));
+      })
+      .catch(console.error)
+  );
 
 // TODO - make build default command?
 // Make collect the default command
@@ -25,14 +30,3 @@ if (!args[2] || !program.commands.some(c => c.name() === args[2])) {
 }
 
 program.parse(process.argv);
-
-function _handle(fn) {
-  return function() {
-    Promise.resolve()
-      .then(() => fn.apply(null, arguments))
-      .then(result => console.log('RESULT', result))
-      .catch(err => {
-        console.error(err);
-      });
-  };
-}

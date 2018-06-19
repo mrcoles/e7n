@@ -10,25 +10,22 @@ const LOADERS = [htmlParser, jsParser];
 
 const IGNORES = ['.git', 'node_modules'];
 
-// Name of error thrown during collect if errors are found
-// inside the collected strings.
+// Error name thrown during collect if errors are found in the collected strings
 const COLLECT_ERROR = 'CollectError';
 
-// Name of error thrown while combining strings if a key collision
-// is found where the string values are different.
+// Error name thrown while combining strings if a key collision of diff strings
 const KEY_COLLISION_ERROR = 'KeyCollisionError';
 
+// Error name thrown if manifest has a bad  or unset default locale value
 const DEFAULT_LOCALE_ERROR = 'DefaultLocaleError';
 
 const collect = async (root, opts) => {
   // TODO - things to improve in collect function
   //
-  // *   return something more cli-friendly?
   // *   break out the collect & combine steps to their own things
-  //
-  // *   do not throw on CollectError
-  // *   delete orphaned auto-generated keys from messages
-  // *   dry-run
+  // *   option to not throw on CollectError
+  // *   option to delete orphaned "not_found" auto-generated keys from messages
+  // *   option to do a dry-run
   //
   root = root || process.cwd();
   let srcPath = opts.srcPath || root;
@@ -56,6 +53,13 @@ const collect = async (root, opts) => {
       }
     }
     delete defaultLocaleData[key];
+
+    // we use `not_found` to track existing messages that are not found in the
+    // code anymore, so delete it if we found it this time
+    if (data && data.not_found !== undefined) {
+      delete data.not_found;
+    }
+
     return [key, data];
   });
 
@@ -65,6 +69,7 @@ const collect = async (root, opts) => {
 
   Object.entries(defaultLocaleData).forEach(entry => {
     if (entry[0].startsWith('_')) {
+      entry[1].not_found = true;
       leftOversAuto.push(entry);
     } else {
       leftOversManual.push(entry);
