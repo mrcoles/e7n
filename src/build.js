@@ -40,15 +40,14 @@ const collect = async (root, opts) => {
 
   let defaultLocale = await getDefaultLocale(root);
   let defaultLocalePath = getLocalePath(root, defaultLocale);
-  let defaultLocaleData = await fsutil.readJson(defaultLocalePath);
 
   // format: { string key: { string message, string description }, ... }
-  let messages = Object.entries(defaultLocaleData).map(([key, msgData]) => {});
+  let defaultLocaleData = await fsutil.readJson(defaultLocalePath);
 
   // gather all the messages we can find or create
   let autoMessages = strings.map(string => {
     let key = string.key;
-    let data = messages[key];
+    let data = defaultLocaleData[key];
     if (!data || !data.message) {
       data = data || {};
       data.message = string.value;
@@ -56,7 +55,7 @@ const collect = async (root, opts) => {
         data.description = `via ${string.filenames.join(', ')}`;
       }
     }
-    delete messages[key];
+    delete defaultLocaleData[key];
     return [key, data];
   });
 
@@ -79,11 +78,25 @@ const collect = async (root, opts) => {
   // generate new messages data
   let newMessages = {};
 
-  [leftOversManual, autoMessages, leftOversAuto].forEach(messagesArr => {
+  let messagesArrs = [leftOversManual, autoMessages, leftOversAuto];
+
+  messagesArrs.forEach(messagesArr => {
     messagesArr.forEach(([key, data]) => {
       newMessages[key] = data;
     });
   });
+
+  // check rep - make sure no overlaps between 3 lists
+  if (
+    Object.keys(newMessages).length !==
+    messagesArrs.reduce((acc, val) => acc + val.length, 0)
+  ) {
+    let error = new Error(
+      'The messages arrays for `newMessages` contain dupes!'
+    );
+    error.name = 'CheckRep';
+    throw error;
+  }
 
   // write file
   await fsutil.writeFile(

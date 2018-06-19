@@ -1,7 +1,7 @@
 const acorn = require('acorn');
 const walk = require('acorn/dist/walk');
 
-const FN_NAME = 'gs';
+const FN_NAME = require('../constants').FN_NAME;
 
 const PATTERN = '**/*.js';
 

@@ -1,6 +1,6 @@
 const cheerio = require('cheerio');
 
-const ATTR_NAME = 'data-e7n';
+const ATTR_NAME = require('../constants').ATTR_NAME;
 
 const PATTERN = '**/*.html';
 
