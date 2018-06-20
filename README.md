@@ -2,9 +2,11 @@
 
 A tool to auto-populate `_locales/<default_locale>/messages.json` with strings found in a Chrome extension project, and to provide conversion from those strings into localized text.
 
-## Identify localizable strings
+## 1. Mark up localizable strings
 
-In HTML files mark tags with a `data-e7n` tag. Such tags should only contain text (or comments):
+### HTML
+
+Mark HTML tags with a `data-e7n` tag. Such tags should only contain text (or comments):
 
 ```html
 <div>
@@ -13,7 +15,9 @@ In HTML files mark tags with a `data-e7n` tag. Such tags should only contain tex
 </div>
 ```
 
-In JavaScript files use the `tr` function to signify text that is a localizable string. Use string literals or variables that are string literals. (TODO: what if string literals concatted with plus?)
+### JavaScript
+
+Use the e7n `tr` JavaScript function to signify text that is a localizable string. Use string literals or variables that are string literals.
 
 ```javascript
 import { tr } from 'e7n';
@@ -21,7 +25,13 @@ import { tr } from 'e7n';
 const FOO = tr('This is a localized string.');
 ```
 
-## Convert strings
+TODO:
+
+- fails on string literals that are concatted with plus?
+- currently HTML-escapes results, should this not happen?
+- currently ony supports \*.js files
+
+## 2. Setup auto-conversion
 
 In HTML files, auto-convert your marked tags with the `updateHtml` function:
 
@@ -44,3 +54,13 @@ const update = () => {
 ```
 
 In JavaScript files, the `tr` function will already convert messages for you.
+
+## 3. Build project
+
+Generate your `_locales/<default_locale>/messages.json` file via the following steps:
+
+1.  Add a "default_locale" value to your extension’s manifest.json file, e.g., `"default_locale": "en",`
+2.  Create a starting messages.json file: `mkdir -p _locales/en/ && echo '{}' > _locales/en/messages.json` (TODO: automate this more, so you don't need to create the directory or file)
+3.  Run e7n: `e7n [path_to_src_directory_with_manifest]`
+
+The build will fail if it encounters issues generating the messages. If it succeeds, it will print out the JSON for the new file and also update the file in place.
