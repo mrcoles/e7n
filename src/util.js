@@ -1,8 +1,7 @@
 const normalize = text =>
   text
     .trim()
-    .replace(/\s+/g, '-')
-    .replace(/-+/g, '-')
+    .replace(/[\s\-_]+/g, '_')
     .replace(/[^A-z0-9-]/g, '');
 
 const asKey = text => `_${normalize(text)}`;
