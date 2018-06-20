@@ -12,13 +12,11 @@
     "e7n": "bin/cli.js"
   },
   "dependencies": {
-    "css.escape": "^1.5.1"
-  },
-  "devDependencies": {
     "acorn": "^5.7.1",
     "chalk": "^2.4.1",
     "cheerio": "^1.0.0-rc.2",
     "commander": "^2.15.1",
+    "css.escape": "^1.5.1",
     "glob": "^7.1.2"
   }
 }
