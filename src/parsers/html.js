@@ -10,7 +10,7 @@ const parse = (text, attrName = ATTR_NAME) => {
   const strings = [];
   const errors = [];
   $(`[${attrName}]`).each((_, elt) => {
-    let $elt = $(elt);
+    const $elt = $(elt);
 
     let badTypes = elt.children.filter(child => !okTypes.has(child.type));
     if (badTypes.length > 0) {
@@ -21,13 +21,12 @@ const parse = (text, attrName = ATTR_NAME) => {
         )
       );
     } else {
-      let text = $(elt)
-        .text()
-        .trim();
+      const text = $elt.text().trim();
+      const key = $elt.attr(attrName) || undefined;
       if (!text) {
         errors.push(_formatError($elt, 'No text in element!'));
       } else {
-        strings.push(text);
+        strings.push({ text, key });
       }
     }
   });
@@ -56,3 +55,18 @@ const _formatError = ($elt, message) => {
 //
 
 module.exports = { PATTERN, parse };
+
+//
+// ## Quick test...
+//
+
+if (require.main === module) {
+  const fs = require('fs');
+  const path = require('path');
+  const html = fs.readFileSync(
+    path.join(__dirname, '../__tests__/sample.html'),
+    'utf8'
+  );
+  const result = parse(html);
+  console.log('result', result);
+}

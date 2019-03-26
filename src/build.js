@@ -32,13 +32,13 @@ const collect = async (root, opts) => {
 
   let strings = await gatherStrings(srcPath);
 
-  // format: [{ string key, string value, array[string] filenames }, ... ]
+  // format: [{ key: string, value: string, filenames: array[string] }, ... ]
   strings = combineStringsByKey(strings);
 
   let defaultLocale = await getDefaultLocale(root);
   let defaultLocalePath = getLocalePath(root, defaultLocale);
 
-  // format: { string key: { string message, string description }, ... }
+  // format: { key: { message: string, description: string }, ... }
   let defaultLocaleData = await fsutil.readJson(defaultLocalePath);
 
   // gather all the messages we can find or create
@@ -135,9 +135,9 @@ const gatherStrings = async srcPath => {
       }
 
       allStrings = allStrings.concat(
-        strings.map(string => {
-          let key = util.asKey(string);
-          return { value: string, filename, key };
+        strings.map(({ text, key }) => {
+          key = key || util.asKey(text);
+          return { value: text, filename, key };
         })
       );
 

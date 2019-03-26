@@ -24,13 +24,17 @@ Use the e7n `tr` JavaScript function to signify text that is a localizable strin
 ```javascript
 import { tr } from 'e7n';
 
+// auto-generated key
 const FOO = tr('This is a localized string.');
+
+// manually specified key
+const BAR = tr('This is also localized', 'bar');
 ```
 
 TODO:
 
 - fails on string literals that are concatted with plus?
-- currently HTML-escapes results, should this not happen?
+- currently it HTML-escapes results in HTML, should this not happen?
 - currently ony supports \*.js files
 
 ## 2. Setup auto-conversion

@@ -23,6 +23,28 @@ const _findStrings = (ast, globals, fnName) => {
   const strings = [];
   const errors = [];
 
+  const _resolve = arg => {
+    switch (arg.type) {
+      case 'Literal':
+        return [null, arg.value];
+      case 'Identifier':
+        let value = globals.vars[arg.name] || localVars[arg.name];
+        if (value) {
+          return [null, value];
+        } else {
+          return [
+            _formatError(
+              node,
+              text,
+              `No literal value found for var: ${arg.name}`
+            )
+          ];
+        }
+      default:
+        return [_formatError(node, text, 'Invalid argument, not a string')];
+    }
+  };
+
   walk.full(ast, node => {
     if (
       node.type === 'VariableDeclarator' &&
@@ -38,31 +60,18 @@ const _findStrings = (ast, globals, fnName) => {
         }
       }
     } else if (node.type === 'CallExpression' && node.callee.name === fnName) {
-      let arg = node.arguments[0];
+      const arg0 = node.arguments[0];
+      const arg1 = node.arguments[1];
 
-      switch (arg.type) {
-        case 'Literal':
-          strings.push(arg.value);
-          break;
-        case 'Identifier':
-          let value = globals.vars[arg.name] || localVars[arg.name];
-          if (value) {
-            strings.push(value);
-          } else {
-            errors.push(
-              _formatError(
-                node,
-                text,
-                `No literal value found for var: ${arg.name}`
-              )
-            );
-          }
-          break;
-        default:
-          errors.push(
-            _formatError(node, text, 'Invalid argument, not a string')
-          );
-          break;
+      const [err0, val0] = _resolve(arg0);
+      const [err1, val1] = arg1 ? _resolve(arg1) : [null, undefined];
+
+      if (err0) {
+        errors.push(err0);
+      } else if (err1) {
+        errors.push(err1);
+      } else {
+        strings.push({ text: val0, key: val1 || undefined });
       }
     }
   });
@@ -127,3 +136,18 @@ const _getLineAndChar = (text, pos) => {
 //
 
 module.exports = { PATTERN, parse };
+
+//
+// ## Quick test...
+//
+
+if (require.main === module) {
+  const fs = require('fs');
+  const path = require('path');
+  const js = fs.readFileSync(
+    path.join(__dirname, '../__tests__/sample.js'),
+    'utf8'
+  );
+  const result = parse(js);
+  console.log('result', result);
+}
