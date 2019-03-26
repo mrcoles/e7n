@@ -2,7 +2,7 @@ const normalize = text =>
   text
     .trim()
     .replace(/[\s\-_]+/g, '_')
-    .replace(/[^A-z0-9-]/g, '');
+    .replace(/[^A-Za-z0-9-]/g, '');
 
 const asKey = text => `_${normalize(text)}`;
 
@@ -16,3 +16,4 @@ module.exports = { normalize, asKey };
 //
 // *   multiple words
 // *   repeated spaces
+// *   'foo\bar' -> 'foobar' (previous [A-z] bug)
