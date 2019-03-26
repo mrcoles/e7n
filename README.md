@@ -10,10 +10,12 @@ Mark HTML tags with a `data-e7n` tag. Such tags should only contain text (or com
 
 ```html
 <div>
-    <span data-e7n>Hello!</span>
-    <img src="foo.png" />
+  <span data-e7n>Hello!</span>
+  <img src="foo.png" />
 </div>
 ```
+
+The i18n key is auto-derived from the text. You can also manually specify the key by setting a value on the data attr, e.g., `data-e7n="hello"`.
 
 ### JavaScript
 
