@@ -12,14 +12,16 @@ const tr = (text, key) => {
   return chrome.i18n.getMessage(key) || text;
 };
 
-// check rep - avoid function name not matching
-if (tr.name !== constants.FN_NAME) {
-  let error = new Error(
-    `Function name mismatch: ${tr.name} vs ${constants.FN_NAME}`
-  );
-  error.name = 'CheckRep';
-  throw error;
-}
+// NOTE - this breaks from parcel builds, TODO adjust this
+// to maybe only do the checkrep during the e7n build step?
+// // check rep - avoid function name not matching
+// if (tr.name !== constants.FN_NAME) {
+//   let error = new Error(
+//     `Function name mismatch: ${tr.name} vs ${constants.FN_NAME}`
+//   );
+//   error.name = 'CheckRep';
+//   throw error;
+// }
 
 //
 // ## HTML handling
