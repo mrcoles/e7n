@@ -64,7 +64,7 @@ if (require.main === module) {
   const fs = require('fs');
   const path = require('path');
   const html = fs.readFileSync(
-    path.join(__dirname, '../__tests__/sample.html'),
+    path.join(__dirname, '../../samples/sample.html'),
     'utf8'
   );
   const result = parse(html);

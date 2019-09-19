@@ -212,7 +212,7 @@ if (require.main === module) {
   const fs = require('fs');
   const path = require('path');
   const js = fs.readFileSync(
-    path.join(__dirname, '../__tests__/sample.js'),
+    path.join(__dirname, '../../samples/sample.js'),
     'utf8'
   );
   const result = parse(js);
