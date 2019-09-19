@@ -1,14 +1,14 @@
-require('css.escape'); // polyfill
+import 'css.escape'; // polyfill
 
-const util = require('./util');
-const constants = require('./constants');
+import { ATTR_NAME } from './constants';
+import { asKey } from './util';
 
 //
 // ## JS handling
 //
 
-const tr = (text, key) => {
-  key = key || util.asKey(text);
+export const tr = (text: string, key?: string) => {
+  key = key || asKey(text);
   return chrome.i18n.getMessage(key) || text;
 };
 
@@ -27,18 +27,23 @@ const tr = (text, key) => {
 // ## HTML handling
 //
 
-const updateHtml = (context = null, attr = constants.ATTR_NAME) => {
+export const updateHtml = (
+  context: Document | HTMLElement | undefined | null = null,
+  attr = ATTR_NAME
+) => {
   context = context || document;
-  const elts = context.querySelectorAll(`[${CSS.escape(attr)}]`);
+  const elts = context.querySelectorAll(`[${CSS.escape(attr)}]`) as NodeListOf<
+    HTMLElement
+  >;
 
-  for (const elt of elts) {
+  elts.forEach(elt => {
     updateElt(elt, elt.getAttribute(attr) || undefined);
-  }
+  });
 };
 
-const updateElt = (elt, key) => {
+export const updateElt = (elt: HTMLElement, key?: string) => {
   const text = elt.innerText.trim();
-  key = key || util.asKey(text);
+  key = key || asKey(text);
   const message = chrome.i18n.getMessage(key);
   if (message && message !== text) {
     // TODO - innerText or innerHTML? It seems like for more complex scenarios
@@ -46,9 +51,3 @@ const updateElt = (elt, key) => {
     elt.innerText = message;
   }
 };
-
-//
-// ## Exports
-//
-
-module.exports = { tr, updateHtml, updateElt };

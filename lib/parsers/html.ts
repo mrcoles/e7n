@@ -1,14 +1,17 @@
-const cheerio = require('cheerio');
+import cheerio from 'cheerio';
 
-const ATTR_NAME = require('../constants').ATTR_NAME;
+import { ATTR_NAME } from '../constants';
 
-const PATTERN = '**/*.html';
+import { FormatError, ParseString } from './types';
 
-const parse = (text, attrName = ATTR_NAME) => {
+export const PATTERN = '**/*.html';
+
+export const parse = (text: string, attrName = ATTR_NAME) => {
   const okTypes = new Set(['text', 'comment']);
   const $ = cheerio.load(text);
-  const strings = [];
-  const errors = [];
+  const strings: ParseString[] = [];
+  const errors: FormatError[] = [];
+
   $(`[${attrName}]`).each((_, elt) => {
     const $elt = $(elt);
 
@@ -34,11 +37,13 @@ const parse = (text, attrName = ATTR_NAME) => {
   return { strings, errors };
 };
 
-const _formatError = ($elt, message) => {
-  let sample = $elt
-    .wrap('<div></div>')
-    .parent()
-    .html();
+const _formatError = ($elt: Cheerio, message: string): FormatError => {
+  let sample =
+    $elt
+      .wrap('<div></div>')
+      .parent()
+      .html() || '';
+
   let maxSample = 50;
   let tSample =
     sample.length > maxSample + 2
@@ -46,15 +51,10 @@ const _formatError = ($elt, message) => {
       : sample;
 
   let shortMessage = message;
-  message = `${message} at: ${sample}`;
+  message = `${message} at: ${tSample}`;
+
   return { message, shortMessage, sample };
 };
-
-//
-// ## Exports
-//
-
-module.exports = { PATTERN, parse };
 
 //
 // ## Quick test...
