@@ -9,10 +9,49 @@ import { asKey } from './util';
 
 // TODO - support for placeholders? https://developer.chrome.com/extensions/i18n-messages
 
-export const tr = (text: string, key?: string) => {
-  key = key || asKey(text);
-  return chrome.i18n.getMessage(key) || text;
+type Placeholders = {
+  [placeholder_name: string]: { content: string; example?: string };
 };
+
+export const tr = (
+  text: string,
+  key?: string,
+  data?: any[],
+  placeholders?: Placeholders
+) => {
+  key = key || asKey(text);
+  return (
+    chrome.i18n.getMessage(key, data) ||
+    _addPlaceholders(text, data, placeholders)
+  );
+};
+
+const _addPlaceholders = (
+  text: string,
+  data?: any[],
+  placeholders?: Placeholders
+) => {
+  if (data && placeholders) {
+    Object.entries(placeholders).forEach(([key, info]) => {
+      const sp = info.content.split(/\$(\d+)/);
+      for (let i = 1; i < sp.length; i += 2) {
+        const index = parseInt(sp[i], 10);
+        sp[i] = String(data[i]);
+      }
+      text = text.replace(new RegExp(`\\$${key}\\$`, 'gi'), sp.join(''));
+    });
+  } else {
+    return text;
+  }
+};
+
+/*
+// sample:
+tr('Hi, $name$, your number is $number$.', 'hiYourNumber', ['Alice', '10'], {
+  name: { content: '$1', example: 'Alyssa P' },
+  name: { content: '$2', example: '1' }
+});
+*/
 
 // NOTE - this breaks from parcel builds, TODO adjust this
 // to maybe only do the checkrep during the e7n build step?

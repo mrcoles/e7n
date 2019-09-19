@@ -152,7 +152,12 @@ export const collect = async (
 
 //
 
-type GatheredString = { key: string; value: string; filename: string };
+type GatheredString = {
+  key: string;
+  value: string;
+  placeholders?: any; // TODO - stricter type checking, e.g., index -> Placeholders
+  filename: string;
+};
 type GatheredError = FormatError & { filename: string };
 
 const gatherStrings = async (srcPath: string): Promise<GatheredString[]> => {
@@ -212,7 +217,12 @@ const gatherStrings = async (srcPath: string): Promise<GatheredString[]> => {
 
 const combineStringsByKey = (
   strings: GatheredString[]
-): { key: string; value: string; filenames: string[] }[] => {
+): {
+  key: string;
+  value: string;
+  filenames: string[];
+  placeholders?: any;
+}[] => {
   // map keys to arrays of string objects
   let keyToStrings = new Map<string, GatheredString[]>();
   strings.forEach(string => {
@@ -237,8 +247,9 @@ const combineStringsByKey = (
   });
 
   let combined = Array.from(keyToStrings.entries()).map(([key, strings]) => ({
-    key: strings[0].key,
+    key,
     value: strings[0].value,
+    placeholders: strings[0].placeholders,
     filenames: strings.map(string => string.filename)
   }));
 

@@ -8,7 +8,8 @@ import {
   Statement,
   VariableDeclaration,
   VariableDeclarator,
-  ModuleDeclaration
+  ModuleDeclaration,
+  ObjectExpression
 } from 'estree';
 
 import { FN_NAME } from '../constants';
@@ -103,18 +104,40 @@ const _findStrings = (ast: Program, globals: Globals, fnName: string) => {
           if (isIdentifier(node.callee) && node.callee.name === fnName) {
             const arg0 = node.arguments[0];
             const arg1 = node.arguments[1];
+            const arg2 = node.arguments[2];
+            const arg3 = node.arguments[3];
 
             const [err0, val0] = _resolve(node, arg0);
+
             const [err1, val1] = arg1
               ? _resolve(node, arg1)
               : [null, undefined];
+
+            const err2 =
+              arg2 && arg2.type !== 'ArrayExpression'
+                ? _formatError(
+                    arg2,
+                    `3rd arg must be an ArrayExpression, but got ${arg2.type}`,
+                    ''
+                  )
+                : null;
+
+            let err3 = null;
+            let val3 = undefined;
+            if (arg3 && arg3.type === 'ObjectExpression') {
+              val3 = _parseObjectExpression(arg3);
+            }
 
             if (err0) {
               errors.push(err0);
             } else if (err1) {
               errors.push(err1);
             } else if (typeof val0 === 'string') {
-              strings.push({ text: val0, key: val1 || undefined });
+              strings.push({
+                text: val0,
+                key: val1 || undefined,
+                placeholders: val3
+              });
             } else {
               errors.push(
                 _formatError(
@@ -132,6 +155,35 @@ const _findStrings = (ast: Program, globals: Globals, fnName: string) => {
   });
 
   return { strings, errors };
+};
+
+type NestedObj = { [key: string]: NestedObj | string };
+
+const _parseObjectExpression = (
+  obj: ObjectExpression,
+  ignoreErrors = false
+) => {
+  const ret: NestedObj = {};
+  for (let prop of obj.properties) {
+    if (isIdentifier(prop.key)) {
+      let key = prop.key.name;
+      let valueNode = prop.value;
+      if (valueNode.type === 'Literal') {
+        ret[key] = String(valueNode.value);
+      } else if (valueNode.type === 'ObjectExpression') {
+        ret[key] = _parseObjectExpression(valueNode);
+      } else {
+        if (!ignoreErrors) {
+          throw new Error(`Invalid object expression value: ${valueNode.type}`);
+        }
+      }
+    } else {
+      if (!ignoreErrors) {
+        throw new Error(`Unknown object expression key type! ${prop.key.type}`);
+      }
+    }
+  }
+  return ret;
 };
 
 const _getGlobals = (ast: Program): Globals => {
@@ -216,5 +268,5 @@ if (require.main === module) {
     'utf8'
   );
   const result = parse(js);
-  console.log('result', result);
+  console.log('result', JSON.stringify(result, null, 2));
 }
