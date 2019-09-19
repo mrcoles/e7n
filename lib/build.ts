@@ -10,6 +10,13 @@ type LocaleFileDataValue = {
   message: string;
   description: string;
   not_found?: boolean;
+  placeholders?: {
+    [placeholder_name: string]: {
+      // e.g. url: { ... }
+      content: string; // e.g., "$1"
+      example: string; // e.g., "https://developer.mozilla.org"
+    };
+  };
 };
 type LocaleFileData = {
   [key: string]: LocaleFileDataValue;

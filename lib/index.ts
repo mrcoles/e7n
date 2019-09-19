@@ -7,6 +7,8 @@ import { asKey } from './util';
 // ## JS handling
 //
 
+// TODO - support for placeholders? https://developer.chrome.com/extensions/i18n-messages
+
 export const tr = (text: string, key?: string) => {
   key = key || asKey(text);
   return chrome.i18n.getMessage(key) || text;
