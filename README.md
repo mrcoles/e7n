@@ -1,6 +1,12 @@
-# 🌎 e7n: 🌍 Chrome Extension Internationalization 🌏
+# 🌎 e7n: Chrome Extension Internationalization
 
-A tool to auto-populate `_locales/<default_locale>/messages.json` with strings found in a Chrome extension project, and to provide conversion from those strings into localized text.
+**l10n ➡️ localization** “refers to the adaptation of a product, application or document content to meet the language, cultural and other requirements of a specific target market (a locale).” -W3C
+
+**i18n ➡️ internationalization** “is the design and development of a product, application or document content that enables easy localization for target audiences that vary in culture, region, or language.” -W3C
+
+**e7n ➡️ extension** “is a library for making it easier to use the `chrome.i18n` infrastructure” -@mrcoles
+
+This tool auto-populates `_locales/<default_locale>/messages.json` with strings found in a Chrome extension project, and makes it easy to convert from those strings into localized text.
 
 ## 1. Mark up localizable strings
 
@@ -20,6 +26,8 @@ The i18n key is auto-derived from the text. You can also manually specify the ke
 ### JavaScript
 
 Use the e7n `tr` JavaScript function to signify text that is a localizable string. Use string literals or variables that are string literals.
+
+This can run in JavaScript, Typescript, and JSX code—it will look for files matching the glob `**/*.(js|jsx|ts|tsx)`.
 
 ```javascript
 import { tr } from 'e7n';
@@ -41,7 +49,6 @@ TODO:
 
 - fails on string literals that are concatted with plus?
 - currently it HTML-escapes results in HTML, should this not happen?
-- currently ony supports \*.js files
 
 ## 2. Setup auto-conversion
 
