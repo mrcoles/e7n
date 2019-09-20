@@ -273,7 +273,6 @@ path-is-absolute@^1.0.0:
 pseudoloc@^1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/pseudoloc/-/pseudoloc-1.1.0.tgz#9082eecad8d2e64a8d0ed44138f1aef8e1758b52"
-  integrity sha1-kILuytjS5kqNDtRBOPGu+OF1i1I=
   dependencies:
     commander "*"
 
