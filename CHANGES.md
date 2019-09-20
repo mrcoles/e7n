@@ -1,6 +1,8 @@
 # CHANGES
 
-1.5.0 - 2019-09-20? - change javascript parser to also look for .jsx, .ts, and .tsx files in addition to .js.
+1.6.0 - 2019-09-20 - add pseudoloc support for testing - e.g., `import { options } from 'e7n'` and `options.pseudoloc = true`
+
+1.5.0 - 2019-09-20 - change javascript parser to also look for .jsx, .ts, and .tsx files in addition to .js.
 
 1.4.0 - 2019-09-19 - add support for placeholders
 
