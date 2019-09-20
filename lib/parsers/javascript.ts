@@ -29,7 +29,7 @@ const isIdentifier = (arg: any): arg is Identifier => {
   return arg && arg.type === 'Identifier';
 };
 
-export const PATTERN = '**/*.js';
+export const PATTERN = '**/*.{js,jsx,ts,tsx}'; // HARDCODED - in README.md
 
 export const parse = (text: string, fnName = FN_NAME) => {
   const file = babelParse(text, {

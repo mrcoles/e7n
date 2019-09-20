@@ -27,7 +27,7 @@ The i18n key is auto-derived from the text. You can also manually specify the ke
 
 Use the e7n `tr` JavaScript function to signify text that is a localizable string. Use string literals or variables that are string literals.
 
-This can run in JavaScript, Typescript, and JSX code—it will look for files matching the glob `**/*.(js|jsx|ts|tsx)`.
+This can run in JavaScript, Typescript, and JSX code—it will look for files matching the glob `**/*.{js,jsx,ts,tsx}`.
 
 ```javascript
 import { tr } from 'e7n';
@@ -39,10 +39,15 @@ const FOO = tr('This is a localized string.');
 const BAR = tr('This is also localized', 'bar');
 
 // with placeholders (you can also set the key 2nd arg to `null`)
-const BAZ = tr('Hi, $name$, your number is $number$.', 'hiYourNumber', ['Alice', '10'], {
-  name: { content: '$1', example: 'Alyssa P' },
-  name: { content: '$2', example: '1' }
-});
+const BAZ = tr(
+  'Hi, $name$, your number is $number$.',
+  'hiYourNumber',
+  ['Alice', '10'],
+  {
+    name: { content: '$1', example: 'Alyssa P' },
+    name: { content: '$2', example: '1' }
+  }
+);
 ```
 
 TODO:
