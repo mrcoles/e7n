@@ -1,6 +1,6 @@
 declare module 'css.escape';
 
-declare module 'pseudoloc' {
+declare module 'pseudoloc/pseudoloc' {
   type Options = {
     prepend: string;
     append: string;

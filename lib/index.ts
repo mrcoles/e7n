@@ -1,6 +1,6 @@
 import 'css.escape'; // polyfill
 
-import { str } from 'pseudoloc';
+import { str } from 'pseudoloc/pseudoloc';
 
 import { ATTR_NAME } from './constants';
 import { asKey } from './util';
