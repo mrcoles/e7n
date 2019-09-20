@@ -1,6 +1,6 @@
 import 'css.escape'; // polyfill
 
-import { str } from 'pseudoloc/pseudoloc';
+import { localize } from 'pseudo-localization';
 
 import { ATTR_NAME } from './constants';
 import { asKey } from './util';
@@ -32,7 +32,7 @@ export const tr = (
     _addPlaceholders(text, data, placeholders);
 
   if (options.pseudoloc) {
-    message = str(message);
+    message = localize(message);
   }
 
   return message;
@@ -96,10 +96,11 @@ export const updateHtml = (
 export const updateElt = (elt: HTMLElement, key?: string) => {
   const text = elt.innerText.trim();
   key = key || asKey(text);
-  const message = chrome.i18n.getMessage(key);
+
+  const message = tr(text, key);
   if (message && message !== text) {
-    // TODO - innerText or innerHTML? It seems like for more complex scenarios
-    // we'll need to do innerHTML
-    elt.innerText = message;
+    // TODO - textContent or innerHTML? It seems like for more complex scenarios
+    // we'll need to do innerHTML?
+    elt.textContent = message;
   }
 };

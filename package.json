@@ -1,7 +1,7 @@
 {
   "name": "e7n",
   "description": "A tool for Chrome extensions i18n/l10n to auto-populate _locales/<default_locale>/messages.json with messages from JS and HTML files",
-  "version": "1.6.0",
+  "version": "1.6.1",
   "main": "dist/index.js",
   "license": "MIT",
   "repository": {
@@ -25,7 +25,7 @@
     "css.escape": "^1.5.1",
     "estree-walker": "^0.8.1",
     "glob": "^7.1.2",
-    "pseudoloc": "^1.1.0"
+    "pseudo-localization": "^2.1.1"
   },
   "devDependencies": {
     "@babel/types": "^7.6.1",

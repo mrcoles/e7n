@@ -1,5 +1,7 @@
 # CHANGES
 
+1.6.1 - 2019-09-20 - switch to pseudo-localization lib, since other one had broken imports
+
 1.6.0 - 2019-09-20 - add pseudoloc support for testing - e.g., `import { options } from 'e7n'` and `options.pseudoloc = true`
 
 1.5.0 - 2019-09-20 - change javascript parser to also look for .jsx, .ts, and .tsx files in addition to .js.

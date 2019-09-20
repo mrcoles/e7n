@@ -1,19 +1,9 @@
 declare module 'css.escape';
 
-declare module 'pseudoloc/pseudoloc' {
-  type Options = {
-    prepend: string;
-    append: string;
-    delimiter: string;
-    startDelimiter: string;
-    endDelimiter: string;
-    extend: number;
-    override?: string;
+declare module 'pseudo-localization' {
+  export type LocalizeOptions = {
+    strategy?: string;
   };
 
-  export type PsuedolocOptions = Partial<Options>;
-
-  export const version: string;
-  export const option: Options;
-  export function str(text: string): string;
+  export function localize(text: string, options?: LocalizeOptions): string;
 }
