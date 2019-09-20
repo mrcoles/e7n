@@ -1,7 +1,13 @@
 import 'css.escape'; // polyfill
 
+import { str } from 'pseudoloc';
+
 import { ATTR_NAME } from './constants';
 import { asKey } from './util';
+
+export const options = {
+  pseudoloc: false
+};
 
 //
 // ## JS handling
@@ -20,10 +26,16 @@ export const tr = (
   placeholders?: Placeholders
 ) => {
   key = key || asKey(text);
-  return (
+
+  let message =
     chrome.i18n.getMessage(key, data) ||
-    _addPlaceholders(text, data, placeholders)
-  );
+    _addPlaceholders(text, data, placeholders);
+
+  if (options.pseudoloc) {
+    message = str(message);
+  }
+
+  return message;
 };
 
 const _addPlaceholders = (
