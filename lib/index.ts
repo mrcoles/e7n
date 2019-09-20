@@ -40,9 +40,8 @@ const _addPlaceholders = (
       }
       text = text.replace(new RegExp(`\\$${key}\\$`, 'gi'), sp.join(''));
     });
-  } else {
-    return text;
   }
+  return text;
 };
 
 /*
