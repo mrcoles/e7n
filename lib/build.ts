@@ -258,8 +258,7 @@ const combineStringsByKey = (
   return combined;
 };
 
-const getDefaultLocale = async (root: string) => {
-  let manifestPath = join(root, 'manifest.json');
+const getDefaultLocale = async (manifestPath: string) => {
   let data = await readJson(manifestPath);
   let defaultLocale = data.default_locale;
   if (!defaultLocale || typeof defaultLocale !== 'string') {
