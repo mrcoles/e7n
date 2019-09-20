@@ -1,4 +1,4 @@
-# e7n: Chrome Extension Internationalization
+# 🌎 e7n: 🌍 Chrome Extension Internationalization 🌏
 
 A tool to auto-populate `_locales/<default_locale>/messages.json` with strings found in a Chrome extension project, and to provide conversion from those strings into localized text.
 
@@ -29,6 +29,12 @@ const FOO = tr('This is a localized string.');
 
 // manually specified key
 const BAR = tr('This is also localized', 'bar');
+
+// with placeholders (you can also set the key 2nd arg to `null`)
+const BAZ = tr('Hi, $name$, your number is $number$.', 'hiYourNumber', ['Alice', '10'], {
+  name: { content: '$1', example: 'Alyssa P' },
+  name: { content: '$2', example: '1' }
+});
 ```
 
 TODO:
