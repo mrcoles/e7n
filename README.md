@@ -38,6 +38,9 @@ const FOO = tr('This is a localized string.');
 // manually specified key
 const BAR = tr('This is also localized', 'bar');
 
+// auto-generated key from concatenated string literals
+const MULTI = tr('This is combined ' + 'via plus signs');
+
 // with placeholders (you can also set the key 2nd arg to `null`)
 const BAZ = tr(
   'Hi, $name$, your number is $number$.',
@@ -100,5 +103,4 @@ The build will fail if it encounters issues generating the messages. If it succe
 
 ## Todos
 
-- fails on string literals that are concatted with plus?
 - currently it HTML-escapes results in HTML, should this not happen?

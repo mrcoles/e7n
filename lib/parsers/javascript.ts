@@ -9,7 +9,8 @@ import {
   VariableDeclaration,
   VariableDeclarator,
   ModuleDeclaration,
-  ObjectExpression
+  ObjectExpression,
+  BinaryExpression
 } from 'estree';
 
 import { FN_NAME } from '../constants';
@@ -71,6 +72,8 @@ const _findStrings = (ast: Program, globals: Globals, fnName: string) => {
             )
           ];
         }
+      case 'BinaryExpression':
+        return _parseBinaryExpression(arg);
       default:
         return [_formatError(node, '', 'Invalid argument, not a string')];
     }
@@ -113,7 +116,7 @@ const _findStrings = (ast: Program, globals: Globals, fnName: string) => {
               ? _resolve(node, arg1)
               : [null, undefined];
 
-            const err2 =
+            const err2: FormatError | null =
               arg2 && arg2.type !== 'ArrayExpression'
                 ? _formatError(
                     arg2,
@@ -122,10 +125,18 @@ const _findStrings = (ast: Program, globals: Globals, fnName: string) => {
                   )
                 : null;
 
-            let err3 = null;
-            let val3 = undefined;
-            if (arg3 && arg3.type === 'ObjectExpression') {
-              val3 = _parseObjectExpression(arg3);
+            let err3: FormatError | null = null;
+            let val3: NestedObj | undefined = undefined;
+            if (arg3) {
+              if (arg3.type === 'ObjectExpression') {
+                val3 = _parseObjectExpression(arg3);
+              } else {
+                err3 = _formatError(
+                  arg3,
+                  `2nd arg must be an ObjectExpression, but got ${arg3.type}`,
+                  ''
+                );
+              }
             }
 
             if (err0) {
@@ -155,6 +166,44 @@ const _findStrings = (ast: Program, globals: Globals, fnName: string) => {
   });
 
   return { strings, errors };
+};
+
+const _parseBinaryExpression = (
+  obj: BinaryExpression
+): [FormatError | null, string?] => {
+  if (obj.operator !== '+') {
+    const msg = `Invalid operator inside BinaryExpression: ${obj.operator}`;
+    return [_formatError(obj, msg, '')];
+  }
+
+  let result = '';
+  for (let curNode of [obj.left, obj.right]) {
+    switch (curNode.type) {
+      case 'Literal': {
+        result += curNode.value;
+        break;
+      }
+      case 'BinaryExpression': {
+        const [err, tResult] = _parseBinaryExpression(curNode);
+        if (err) {
+          return [err];
+        }
+        result += tResult;
+        break;
+      }
+      default: {
+        return [
+          _formatError(
+            obj,
+            `Invalid object inside BinaryExpression: ${obj.type}`,
+            ''
+          )
+        ];
+      }
+    }
+  }
+
+  return [null, result];
 };
 
 type NestedObj = { [key: string]: NestedObj | string };
@@ -228,7 +277,11 @@ const isStartEnd = (node: any): node is StartEnd => {
   );
 };
 
-const _formatError = (node: Node, text: string, message: string) => {
+const _formatError = (
+  node: Node,
+  text: string,
+  message: string
+): FormatError => {
   const { start, end } = isStartEnd(node) ? node : { start: 0, end: 0 };
   let [line, char] = _getLineAndChar(text, start);
   let sample = text.substring(start, end);

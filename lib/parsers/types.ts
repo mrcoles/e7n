@@ -7,4 +7,6 @@ export type FormatError = {
   message: string;
   shortMessage: string;
   sample: string;
+  line?: number;
+  char?: number;
 };
