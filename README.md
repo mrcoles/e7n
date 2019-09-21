@@ -104,3 +104,4 @@ The build will fail if it encounters issues generating the messages. If it succe
 ## Todos
 
 - currently it HTML-escapes results in HTML, should this not happen?
+- better error messages to grab sample bad text from source in parsers/javascript
