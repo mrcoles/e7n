@@ -48,7 +48,7 @@ const _addPlaceholders = (
       const sp = info.content.split(/\$(\d+)/);
       for (let i = 1; i < sp.length; i += 2) {
         const index = parseInt(sp[i], 10);
-        sp[i] = String(data[i]);
+        sp[i] = String(data[i - 1]);
       }
       text = text.replace(new RegExp(`\\$${key}\\$`, 'gi'), sp.join(''));
     });
