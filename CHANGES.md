@@ -1,5 +1,7 @@
 # CHANGES
 
+1.7.0 - 2019-09-21 - support concatenating string literals with plus signs
+
 1.6.4 - 2019-09-20 - fixed bug in placeholder code
 
 1.6.3 - 2019-09-20 - updated README and using package.json "files" instead of .npmignore
