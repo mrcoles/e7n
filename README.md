@@ -50,11 +50,6 @@ const BAZ = tr(
 );
 ```
 
-TODO:
-
-- fails on string literals that are concatted with plus?
-- currently it HTML-escapes results in HTML, should this not happen?
-
 ## 2. Setup auto-conversion
 
 In HTML files, auto-convert your marked tags with the `updateHtml` function:
@@ -79,6 +74,20 @@ const update = () => {
 
 In JavaScript files, the `tr` function will already convert messages for you.
 
+### Pseudo-localization
+
+You can enable pseudo-localization (sometimes called "pseudoloc") by setting the pseudoloc option to true.
+
+```javascript
+import { options as e7nOptions } from 'e7n';
+
+e7nOptions.pseudoloc = true;
+```
+
+This can let you test to make sure parts of your UI are connected up properly without having to change your browser's language.
+
+For example "Delete image" would get convrted to: "Ḓḗḗŀḗḗŧḗḗ īḿȧȧɠḗḗ".
+
 ## 3. Build project
 
 Generate your `_locales/<default_locale>/messages.json` file via the following steps:
@@ -88,3 +97,8 @@ Generate your `_locales/<default_locale>/messages.json` file via the following s
 3.  Run e7n: `e7n [path_to_src_directory_with_manifest]`
 
 The build will fail if it encounters issues generating the messages. If it succeeds, it will print out the JSON for the new file and also update the file in place.
+
+## Todos
+
+- fails on string literals that are concatted with plus?
+- currently it HTML-escapes results in HTML, should this not happen?
