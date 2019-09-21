@@ -32,7 +32,17 @@ export const tr = (
     _addPlaceholders(text, data, placeholders);
 
   if (options.pseudoloc) {
-    message = localize(message);
+    if (data && placeholders) {
+      // HACK - do extra step to go back to original and extra parts
+      // so we can *only* localize the text, not the placeholders
+      message = text
+        .split(/(\$[A-Za-z][A-Za-z0-9_]*\$)/)
+        .map((val, i) => (i % 2 === 0 ? localize(val) : val))
+        .join('');
+      message = _addPlaceholders(message, data, placeholders);
+    } else {
+      message = localize(message);
+    }
   }
 
   return message;
