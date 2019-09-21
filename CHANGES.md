@@ -1,5 +1,7 @@
 # CHANGES
 
+1.6.4 - 2019-09-20 - fixed bug in placeholder code
+
 1.6.3 - 2019-09-20 - updated README and using package.json "files" instead of .npmignore
 
 1.6.1 - 2019-09-20 - switch to pseudo-localization lib, since other one had broken imports
