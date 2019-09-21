@@ -75,7 +75,13 @@ const _findStrings = (ast: Program, globals: Globals, fnName: string) => {
       case 'BinaryExpression':
         return _parseBinaryExpression(arg);
       default:
-        return [_formatError(node, '', 'Invalid argument, not a string')];
+        return [
+          _formatError(
+            node,
+            '',
+            `Invalid argument, not a string: "${arg.type}"`
+          )
+        ];
     }
   };
 
@@ -217,13 +223,32 @@ const _parseObjectExpression = (
     if (isIdentifier(prop.key)) {
       let key = prop.key.name;
       let valueNode = prop.value;
-      if (valueNode.type === 'Literal') {
-        ret[key] = String(valueNode.value);
-      } else if (valueNode.type === 'ObjectExpression') {
-        ret[key] = _parseObjectExpression(valueNode);
-      } else {
-        if (!ignoreErrors) {
-          throw new Error(`Invalid object expression value: ${valueNode.type}`);
+      switch (valueNode.type) {
+        case 'Literal': {
+          ret[key] = String(valueNode.value);
+          break;
+        }
+        case 'ObjectExpression': {
+          ret[key] = _parseObjectExpression(valueNode);
+          break;
+        }
+        case 'BinaryExpression': {
+          const [tErr, tVal] = _parseBinaryExpression(valueNode);
+          // TODO - typ the return value better so mutually exclusive error or not?
+          if (tErr || !tVal) {
+            throw new Error(
+              tErr ? tErr.message : `No value returned for ${valueNode}`
+            );
+          }
+          ret[key] = tVal;
+          break;
+        }
+        default: {
+          if (!ignoreErrors) {
+            throw new Error(
+              `Invalid object expression value: ${valueNode.type}`
+            );
+          }
         }
       }
     } else {
