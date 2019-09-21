@@ -24,7 +24,10 @@ export const parse = (text: string, attrName = ATTR_NAME) => {
         )
       );
     } else {
-      const text = $elt.text().trim();
+      const text = $elt
+        .text()
+        .trim()
+        .replace(/\s+/gi, ' ');
       const key = $elt.attr(attrName) || undefined;
       if (!text) {
         errors.push(_formatError($elt, 'No text in element!'));
