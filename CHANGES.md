@@ -1,6 +1,8 @@
 # CHANGES
 
-1.7.0 - 2019-09-21 - support concatenating string literals with plus signs
+1.7.1 - ? - fixed bug with placeholders not getting passed into final file
+
+1.7.0 - adc45bc - 2019-09-21 - support concatenating string literals with plus signs
 
 1.6.4 - 97bc946 - 2019-09-20 - fixed bug in placeholder code
 

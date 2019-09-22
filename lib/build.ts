@@ -85,6 +85,7 @@ export const collect = async (
         if (!data.description) {
           data.description = `via ${string.filenames.join(', ')}`;
         }
+        data.placeholders = string.placeholders;
       }
       delete defaultLocaleData[key];
 
@@ -187,9 +188,9 @@ const gatherStrings = async (srcPath: string): Promise<GatheredString[]> => {
       }
 
       allStrings = allStrings.concat(
-        strings.map(({ text, key }) => {
+        strings.map(({ text, key, placeholders }) => {
           key = key || asKey(text);
-          return { value: text, filename, key };
+          return { value: text, filename, key, placeholders };
         })
       );
 
