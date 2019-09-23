@@ -101,6 +101,10 @@ Generate your `_locales/<default_locale>/messages.json` file via the following s
 
 The build will fail if it encounters issues generating the messages. If it succeeds, it will print out the JSON for the new file and also update the file in place.
 
+## 4. Perform translations
+
+You may translate your files via any service you like or using AWS Translate with [e7n-aws-translate](https://github.com/mrcoles/e7n-aws-translate).
+
 ## Todos
 
 - currently it HTML-escapes results in HTML, should this not happen?
