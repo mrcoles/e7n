@@ -15,19 +15,39 @@ export const parse = (text: string, attrName = ATTR_NAME) => {
   $(`[${attrName}]`).each((_, elt) => {
     const $elt = $(elt);
 
-    let badTypes = elt.children.filter(child => !okTypes.has(child.type));
-    if (badTypes.length > 0) {
-      errors.push(
-        _formatError(
-          $elt,
-          `Element contains complex children types: ${badTypes.join(', ')}`
-        )
-      );
+    // if [data-e7n-html] exists too, then grab as HTML instead of text
+    const allowHtml = $elt.prop(`${attrName}-html`) !== undefined;
+
+    let isOk = true;
+
+    if (allowHtml) {
+      const e7nChildren = $elt.find(`[${attrName}]`);
+      if (e7nChildren.length) {
+        isOk = false;
+        const samples = e7nChildren.map((_, elt) => $.html(elt)).get();
+        errors.push(
+          _formatError(
+            $elt,
+            `Element contains other e7n elements: ${samples.join('\n')}`
+          )
+        );
+      }
     } else {
-      const text = $elt
-        .text()
-        .trim()
-        .replace(/\s+/gi, ' ');
+      const badTypes = elt.children.filter(child => !okTypes.has(child.type));
+      if (badTypes.length > 0) {
+        isOk = false;
+        errors.push(
+          _formatError(
+            $elt,
+            `Element contains complex children types: ${badTypes.join(', ')}`
+          )
+        );
+      }
+    }
+
+    if (isOk) {
+      let text = allowHtml ? $elt.html() || '' : $elt.text();
+      text = text.trim().replace(/\s+/gi, ' ');
       const key = $elt.attr(attrName) || undefined;
       if (!text) {
         errors.push(_formatError($elt, 'No text in element!'));

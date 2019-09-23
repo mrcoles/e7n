@@ -23,6 +23,12 @@ Mark HTML tags with a `data-e7n` tag. Such tags should only contain text (or com
 
 The i18n key is auto-derived from the text. You can also manually specify the key by setting a value on the data attr, e.g., `data-e7n="hello"`.
 
+The content will automatically get HTML-escaped, if you want to parse raw HTML, e.g., if you have a link in the text, then add the `data-e7n-html` to the markup too:
+
+```html
+<p data-e7n data-e7n-html>More info <a href="https://example.com/">here</a>.</p>
+```
+
 ### JavaScript
 
 Use the e7n `tr` JavaScript function to signify text that is a localizable string. Use string literals or variables that are string literals.

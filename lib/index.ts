@@ -99,18 +99,20 @@ export const updateHtml = (
   >;
 
   elts.forEach(elt => {
-    updateElt(elt, elt.getAttribute(attr) || undefined);
+    updateElt(elt, elt.getAttribute(attr) || undefined, attr);
   });
 };
 
-export const updateElt = (elt: HTMLElement, key?: string) => {
+export const updateElt = (elt: HTMLElement, key?: string, attr = ATTR_NAME) => {
   const text = elt.innerText.trim();
   key = key || asKey(text);
 
   const message = tr(text, key);
   if (message && message !== text) {
-    // TODO - textContent or innerHTML? It seems like for more complex scenarios
-    // we'll need to do innerHTML?
-    elt.textContent = message;
+    if (elt.getAttribute(`[${attr}-html]`)) {
+      elt.innerHTML = message;
+    } else {
+      elt.textContent = message;
+    }
   }
 };
