@@ -23,7 +23,8 @@ export const tr = (
   text: string,
   key?: string,
   data?: any[],
-  placeholders?: Placeholders
+  placeholders?: Placeholders,
+  isHtml?: boolean
 ) => {
   key = key || asKey(text);
 
@@ -37,11 +38,13 @@ export const tr = (
       // so we can *only* localize the text, not the placeholders
       message = text
         .split(/(\$[A-Za-z][A-Za-z0-9_]*\$)/)
-        .map((val, i) => (i % 2 === 0 ? localize(val) : val))
+        .map((val, i) =>
+          i % 2 === 0 ? _pseudoLocalizeWithHtml(val, isHtml) : val
+        )
         .join('');
       message = _addPlaceholders(message, data, placeholders);
     } else {
-      message = localize(message);
+      message = _pseudoLocalizeWithHtml(message, isHtml);
     }
   }
 
@@ -104,15 +107,83 @@ export const updateHtml = (
 };
 
 export const updateElt = (elt: HTMLElement, key?: string, attr = ATTR_NAME) => {
-  const text = elt.innerText.trim();
+  const htmlAttr = elt.getAttribute(`${attr}-html`);
+  const asHtml = htmlAttr !== null && htmlAttr !== undefined;
+
+  const text = (asHtml ? elt.innerHTML : elt.innerText).trim();
   key = key || asKey(text);
 
-  const message = tr(text, key);
+  const message = tr(text, key, undefined, undefined, asHtml);
   if (message && message !== text) {
-    if (elt.getAttribute(`[${attr}-html]`)) {
+    if (asHtml) {
       elt.innerHTML = message;
     } else {
       elt.textContent = message;
     }
   }
+};
+
+// ## Helpers
+
+// the localize function doesn't pay attention to HTML, so let's try to only
+// convert the text parts of HTML
+const _pseudoLocalizeWithHtml = (text: string, isHtml?: boolean) => {
+  if (isHtml) {
+    return _separateHtml(text)
+      .map(({ type, content }) =>
+        type === 'html' ? content : localize(content)
+      )
+      .join('');
+  } else {
+    return localize(text);
+  }
+};
+
+// this is for pseudo-localization testing only (not production-grade), tries to
+// separate out text from html tags
+const _separateHtml = (html: string) => {
+  const openChar = '<';
+  const closeChar = '>';
+
+  const results: { type: 'text' | 'html'; content: string }[] = [];
+
+  let lastI = 0;
+  let i = 0;
+  let isOpen = false;
+  const len = html.length;
+
+  const _update = () => {
+    if (i !== lastI) {
+      results.push({
+        type: isOpen ? 'html' : 'text',
+        content: html.substring(lastI, i)
+      });
+    }
+
+    isOpen = !isOpen;
+    lastI = i;
+  };
+
+  for (; i < len; i++) {
+    const char = html[i];
+    if (char === openChar) {
+      if (isOpen) {
+        const error = new Error(`Invalid HTML extra < character: ${html}`);
+        error.name = 'InvalidHTMLError';
+        throw error;
+      }
+      _update();
+    } else if (char === closeChar) {
+      if (!isOpen) {
+        const error = new Error(`Invalid HTML extra > character: ${html}`);
+        error.name = 'InvalidHTMLError';
+        throw error;
+      }
+      _update();
+    }
+  }
+
+  _update();
+
+  return results;
 };
