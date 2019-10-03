@@ -1,6 +1,8 @@
 # CHANGES
 
-1.7.2 - 2019-10-02 - fixed bugs related to handling of raw HTML in data-e7n-html tags
+1.7.3 - 2019-10-03 - add "disabled" boolean to `options`, to allow disabling of translations
+
+1.7.2 - 50b7100 - 2019-10-02 - fixed bugs related to handling of raw HTML in data-e7n-html tags
 
 1.7.1 - 110be60 - 2019-09-23 - fixed bug with placeholders not getting passed into final file and add support for raw HTML via data-e7n-html tag
 
