@@ -6,7 +6,8 @@ import { ATTR_NAME } from './constants';
 import { asKey } from './util';
 
 export const options = {
-  pseudoloc: false
+  pseudoloc: false,
+  disabled: false
 };
 
 //
@@ -27,6 +28,10 @@ export const tr = (
   isHtml?: boolean
 ) => {
   key = key || asKey(text);
+
+  if (options.disabled) {
+    return _addPlaceholders(text, data, placeholders);
+  }
 
   let message =
     chrome.i18n.getMessage(key, data) ||
@@ -56,7 +61,7 @@ const _addPlaceholders = (
   data?: any[],
   placeholders?: Placeholders
 ) => {
-  if (data && placeholders) {
+  if (data && placeholders && text) {
     Object.entries(placeholders).forEach(([key, info]) => {
       const sp = info.content.split(/\$(\d+)/);
       for (let i = 1; i < sp.length; i += 2) {
