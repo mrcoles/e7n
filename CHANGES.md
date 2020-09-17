@@ -1,5 +1,7 @@
 # CHANGES
 
+1.7.4 - 2020-09-17 - @dependabot updates
+
 1.7.3 - 2019-10-03 - add "disabled" boolean to `options`, to allow disabling of translations
 
 1.7.2 - 50b7100 - 2019-10-02 - fixed bugs related to handling of raw HTML in data-e7n-html tags
