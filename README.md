@@ -54,7 +54,7 @@ const BAZ = tr(
   ['Alice', '10'],
   {
     name: { content: '$1', example: 'Alyssa P' },
-    name: { content: '$2', example: '1' }
+    number: { content: '$2', example: '1' }
   }
 );
 ```
