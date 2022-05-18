@@ -10,7 +10,7 @@ import {
   VariableDeclarator,
   ModuleDeclaration,
   ObjectExpression,
-  BinaryExpression
+  BinaryExpression,
 } from 'estree';
 
 import { FN_NAME } from '../constants';
@@ -35,9 +35,9 @@ export const PATTERN = '**/*.{js,jsx,ts,tsx}'; // HARDCODED - in README.md
 export const parse = (text: string, fnName = FN_NAME) => {
   const file = babelParse(text, {
     sourceType: 'module',
-    plugins: ['estree', 'jsx', 'typescript', 'classProperties']
+    plugins: ['estree', 'jsx', 'typescript', 'classProperties'],
   });
-  const program: Program = (file.program as unknown) as Program;
+  const program: Program = file.program as unknown as Program;
   // avoid the "estree" plugin, because unclear how to change the type to match...
   const globals = _getGlobals(program);
   const { strings, errors } = _findStrings(program, globals, fnName);
@@ -61,7 +61,10 @@ const _findStrings = (ast: Program, globals: Globals, fnName: string) => {
         return [null, arg.value];
       case 'Identifier':
         let value = globals.vars[arg.name] || localVars[arg.name];
-        if (value) {
+        if (
+          value ||
+          (value == null && (arg.name === 'undefined' || arg.name === null))
+        ) {
           return [null, value];
         } else {
           return [
@@ -69,7 +72,7 @@ const _findStrings = (ast: Program, globals: Globals, fnName: string) => {
               node,
               value,
               `No literal value found for var: ${arg.name}`
-            )
+            ),
           ];
         }
       case 'BinaryExpression':
@@ -80,7 +83,7 @@ const _findStrings = (ast: Program, globals: Globals, fnName: string) => {
             node,
             '',
             `Invalid argument, not a string: "${arg.type}"`
-          )
+          ),
         ];
     }
   };
@@ -153,7 +156,7 @@ const _findStrings = (ast: Program, globals: Globals, fnName: string) => {
               strings.push({
                 text: val0,
                 key: val1 || undefined,
-                placeholders: val3
+                placeholders: val3,
               });
             } else {
               errors.push(
@@ -168,7 +171,7 @@ const _findStrings = (ast: Program, globals: Globals, fnName: string) => {
           return;
         }
       }
-    }
+    },
   });
 
   return { strings, errors };
@@ -203,7 +206,7 @@ const _parseBinaryExpression = (
             obj,
             `Invalid object inside BinaryExpression: ${obj.type}`,
             ''
-          )
+          ),
         ];
       }
     }
@@ -264,15 +267,15 @@ const _getGlobals = (ast: Program): Globals => {
   const vars: Globals['vars'] = {};
   const nodes: Globals['nodes'] = {};
 
-  ast.body.forEach(node => {});
+  ast.body.forEach((node) => {});
 
   ast.body
     .filter(
       (node: Statement | ModuleDeclaration): node is VariableDeclaration =>
         isVariableDeclaration(node)
     )
-    .forEach(varDec => {
-      varDec.declarations.forEach(node => {
+    .forEach((varDec) => {
+      varDec.declarations.forEach((node) => {
         if (
           node.init &&
           node.init.type === 'Literal' &&
@@ -304,12 +307,13 @@ const isStartEnd = (node: any): node is StartEnd => {
 
 const _formatError = (
   node: Node,
-  text: string,
+  text: string | undefined | null,
   message: string
 ): FormatError => {
+  const t = text || '';
   const { start, end } = isStartEnd(node) ? node : { start: 0, end: 0 };
-  let [line, char] = _getLineAndChar(text, start);
-  let sample = text.substring(start, end);
+  let [line, char] = _getLineAndChar(t, start);
+  let sample = t.substring(start, end);
   let maxSample = 20;
   let tSample =
     sample.length > maxSample + 2

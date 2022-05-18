@@ -1,0 +1,44 @@
+{
+  "_Hello": {
+    "message": "Hello",
+    "description": "via sample.html"
+  },
+  "_Helloahreffoofriendsa": {
+    "message": "Hello <a href=\"/foo\">friends</a>",
+    "description": "via sample.js"
+  },
+  "_Thisisalocalizedstring": {
+    "message": "This is a localized string",
+    "description": "via sample.js"
+  },
+  "_Thisisbazname": {
+    "message": "This is baz, $name$",
+    "description": "via sample.js",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Joe Bloggs"
+      }
+    }
+  },
+  "_Thiswillbelocalized": {
+    "message": "This will be localized",
+    "description": "via sample.js"
+  },
+  "_Thiswillbelocalizedbutitisamultilinesetoftextthatiscombinedviaplussignssotheprogramneedstoknowhowtojointhose": {
+    "message": "This will be localized but it is a multi-line set of text that is combined via plus signs, so the program needs to know how to join those",
+    "description": "via sample.js"
+  },
+  "bar": {
+    "message": "Bar Text",
+    "description": "via sample.html"
+  },
+  "foo": {
+    "message": "Foo Text",
+    "description": "via sample.html"
+  },
+  "other": {
+    "message": "This is other text",
+    "description": "via sample.js"
+  }
+}

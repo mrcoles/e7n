@@ -13,9 +13,16 @@ export function myFunc(name) {
   return {
     bar: tr(BAR),
     baz: tr(baz, null, [name], {
-      name: { content: '$1', example: 'Joe Bloggs' }
+      name: { content: '$1', example: 'Joe Bloggs' },
     }),
     other: tr('This is other text', 'other'),
-    foo: FOO
+    foo: FOO,
+    html: tr(
+      'Hello <a href="/foo">friends</a>',
+      undefined,
+      undefined,
+      undefined,
+      true
+    ),
   };
 }

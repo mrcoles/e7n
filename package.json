@@ -19,7 +19,7 @@
     "prepublish": "npm run build",
     "build": "tsc",
     "watch": "npm run build -- -w",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "npm run build && ./bin/cli.js samples/"
   },
   "dependencies": {
     "@babel/parser": "^7.6.0",
