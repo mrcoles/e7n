@@ -16,7 +16,7 @@
     "e7n": "bin/cli.js"
   },
   "scripts": {
-    "prepublish": "npm run build",
+    "prepublishOnly": "npm run build",
     "build": "tsc",
     "watch": "npm run build -- -w",
     "test": "npm run build && ./bin/cli.js samples/"
