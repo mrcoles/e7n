@@ -31,6 +31,12 @@ The content will automatically get HTML-escaped, if you want to parse raw HTML, 
 <p data-e7n data-e7n-html>More info <a href="https://example.com/">here</a>.</p>
 ```
 
+To specify the key for HTML content, set it on `data-e7n` as usual. `data-e7n-html` is only a flag, so it doesn't take a key, and elements need `data-e7n` to be found:
+
+```html
+<p data-e7n="moreInfo" data-e7n-html>More info <a href="https://example.com/">here</a>.</p>
+```
+
 ### JavaScript
 
 Use the e7n `tr` JavaScript function to signify text that is a localizable string. Use string literals or variables that are string literals.
