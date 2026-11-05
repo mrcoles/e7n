@@ -22,21 +22,24 @@
     "test": "npm run build && ./bin/cli.js samples/"
   },
   "dependencies": {
-    "@babel/parser": "^7.6.0",
-    "chalk": "^2.4.1",
-    "cheerio": "^1.0.0-rc.3",
-    "commander": "^3.0.1",
+    "@babel/parser": "^7.29.13",
+    "chalk": "^4.1.2",
+    "cheerio": "^1.2.0",
+    "commander": "^12.1.0",
     "css.escape": "^1.5.1",
-    "estree-walker": "^0.8.1",
-    "glob": "^7.1.2",
+    "estree-walker": "^2.0.2",
+    "glob": "^13.0.6",
     "pseudo-localization": "^2.1.1"
   },
   "devDependencies": {
-    "@babel/types": "^7.6.1",
-    "@types/cheerio": "^0.22.13",
-    "@types/chrome": "^0.0.88",
-    "@types/estree": "^0.0.39",
-    "@types/glob": "^7.1.1",
-    "typescript": "^3.6.3"
+    "@babel/types": "^7.29.11",
+    "@types/chrome": "^0.0.300",
+    "@types/estree": "^1.0.10",
+    "@types/node": "^20.19.43",
+    "domhandler": "^5.0.3",
+    "typescript": "^5.9.3"
+  },
+  "engines": {
+    "node": ">=20.18.1"
   }
 }

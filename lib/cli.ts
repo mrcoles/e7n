@@ -1,5 +1,5 @@
 import chalk from 'chalk';
-import program from 'commander';
+import { program } from 'commander';
 
 import { collect } from './build';
 
@@ -26,8 +26,8 @@ program
   )
   .option('--print', 'Print the result to stdout instead of updating the file')
   .option('--verbose', 'Verbose output')
-  .action((root, opts) => {
-    return collect(root, opts)
+  .action((root: string | undefined, opts: any) => {
+    return collect(root ?? '.', opts)
       .then(x => {
         if (opts.verbose) {
           console.log(chalk.bold('\nUpdated default locale file...\n'));

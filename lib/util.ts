@@ -17,7 +17,9 @@ export const promiseSerialMap = async <O extends any, R extends any>(
     if (i >= numObjs) {
       return lastResult;
     }
-    let prom = objIsProm ? objs[i]() : promFn(objs[i]);
+    let prom: any = objIsProm
+      ? (objs[i] as unknown as () => Promise<R> | R)()
+      : promFn(objs[i]);
     return prom && typeof prom === 'object' && prom.then
       ? prom.then((nextResult: R) => _serialMap(i + 1, nextResult))
       : _serialMap(i + 1, prom);

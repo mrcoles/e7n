@@ -1,4 +1,6 @@
-import cheerio from 'cheerio';
+import * as cheerio from 'cheerio';
+import type { Cheerio } from 'cheerio';
+import type { AnyNode, Element } from 'domhandler';
 
 import { ATTR_NAME } from '../constants';
 
@@ -33,7 +35,9 @@ export const parse = (text: string, attrName = ATTR_NAME) => {
         );
       }
     } else {
-      const badTypes = elt.children.filter(child => !okTypes.has(child.type));
+      const badTypes = (elt as Element).children.filter(
+        child => !okTypes.has(child.type)
+      );
       if (badTypes.length > 0) {
         isOk = false;
         errors.push(
@@ -60,7 +64,10 @@ export const parse = (text: string, attrName = ATTR_NAME) => {
   return { strings, errors };
 };
 
-const _formatError = ($elt: Cheerio, message: string): FormatError => {
+const _formatError = (
+  $elt: Cheerio<AnyNode>,
+  message: string
+): FormatError => {
   let sample =
     $elt
       .wrap('<div></div>')

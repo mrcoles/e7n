@@ -182,7 +182,7 @@ const gatherStrings = async (srcPath: string): Promise<GatheredString[]> => {
         const result = loader.parse(text);
         strings = result.strings;
         errors = result.errors;
-      } catch (err) {
+      } catch (err: any) {
         err.message += ` (while parsing: ${filename})`;
         throw err;
       }

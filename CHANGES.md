@@ -1,5 +1,9 @@
 # CHANGES
 
+Unreleased - skip rewriting messages.json when its content is unchanged; update dependencies (glob 13, commander 12, cheerio 1.x, chalk 4, estree-walker 2, TypeScript 5) and require Node >= 20.18.1; the CLI `root` argument now defaults to the current directory as documented
+
+1.7.5 - 327948a - 2022-05-17 - fix parsing of undefined or null
+
 1.7.4 - 2020-09-17 - @dependabot updates
 
 1.7.3 - 2019-10-03 - add "disabled" boolean to `options`, to allow disabling of translations

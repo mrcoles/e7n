@@ -1,5 +1,6 @@
 import { parse as babelParse } from '@babel/parser';
 import { walk } from 'estree-walker';
+import type { BaseNode } from 'estree';
 
 import {
   Identifier,
@@ -88,8 +89,9 @@ const _findStrings = (ast: Program, globals: Globals, fnName: string) => {
     }
   };
 
-  walk(ast, {
-    enter(node: Node, parent: Node, key: string, index: number) {
+  walk(ast as BaseNode, {
+    enter(baseNode: BaseNode) {
+      const node = baseNode as Node;
       switch (node.type) {
         case 'VariableDeclarator': {
           if (
@@ -223,7 +225,7 @@ const _parseObjectExpression = (
 ) => {
   const ret: NestedObj = {};
   for (let prop of obj.properties) {
-    if (isIdentifier(prop.key)) {
+    if (prop.type === 'Property' && isIdentifier(prop.key)) {
       let key = prop.key.name;
       let valueNode = prop.value;
       switch (valueNode.type) {
@@ -256,7 +258,8 @@ const _parseObjectExpression = (
       }
     } else {
       if (!ignoreErrors) {
-        throw new Error(`Unknown object expression key type! ${prop.key.type}`);
+        const keyType = prop.type === 'Property' ? prop.key.type : prop.type;
+        throw new Error(`Unknown object expression key type! ${keyType}`);
       }
     }
   }
