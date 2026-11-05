@@ -8,6 +8,8 @@
 
 This tool auto-populates `_locales/<default_locale>/messages.json` with strings found in a Chrome extension project, and makes it easy to convert from those strings into localized text.
 
+The `e7n` CLI requires Node.js 20.18.1 or newer.
+
 ## 1. Mark up localizable strings
 
 ### HTML
