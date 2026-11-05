@@ -10,7 +10,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/mrcoles/e7n.git"
+    "url": "git+https://github.com/mrcoles/e7n.git"
   },
   "bin": {
     "e7n": "bin/cli.js"
