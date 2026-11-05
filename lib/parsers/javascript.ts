@@ -19,8 +19,8 @@ import { FN_NAME } from '../constants';
 import { FormatError, ParseString } from './types';
 
 type Globals = {
-  vars: { [name: string]: string };
-  nodes: { [name: string]: VariableDeclarator };
+  vars: Record<string, string>;
+  nodes: Record<string, VariableDeclarator>;
 };
 
 const isVariableDeclaration = (arg: any): arg is VariableDeclaration => {
@@ -52,7 +52,7 @@ export const parse = (text: string, fnName = FN_NAME) => {
 // -> Node { type: 'Identifier', start: 146, end: 150, name: 'BLAH' }
 
 const _findStrings = (ast: Program, globals: Globals, fnName: string) => {
-  const localVars: { [name: string]: string } = {};
+  const localVars: Record<string, string> = {};
   const strings: ParseString[] = [];
   const errors: FormatError[] = [];
 

@@ -10,17 +10,15 @@ type LocaleFileDataValue = {
   message: string;
   description: string;
   not_found?: boolean;
-  placeholders?: {
-    [placeholder_name: string]: {
-      // e.g. url: { ... }
-      content: string; // e.g., "$1"
-      example: string; // e.g., "https://developer.mozilla.org"
-    };
-  };
+  /** keyed by placeholder name, e.g., "url" */
+  placeholders?: Record<string, {
+      /** e.g., "$1" */
+      content: string;
+      /** e.g., "https://developer.mozilla.org" */
+      example: string;
+    }>;
 };
-type LocaleFileData = {
-  [key: string]: LocaleFileDataValue;
-};
+type LocaleFileData = Record<string, LocaleFileDataValue>;
 
 const LOADERS = [htmlParser, jsParser];
 

@@ -16,9 +16,7 @@ export const options = {
 
 // TODO - support for placeholders? https://developer.chrome.com/extensions/i18n-messages
 
-type Placeholders = {
-  [placeholder_name: string]: { content: string; example?: string };
-};
+type Placeholders = Record<string, { content: string; example?: string }>;
 
 export const tr = (
   text: string,
