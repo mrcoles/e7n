@@ -145,7 +145,11 @@ export const collect = async (
   if (opts.print) {
     console.log(output);
   } else {
-    await writeFile(defaultLocalePath, output);
+    // skip unchanged writes, so file watchers and mtime checks don't see a change
+    const existing = await readFile(defaultLocalePath).catch(() => null);
+    if (existing !== output) {
+      await writeFile(defaultLocalePath, output);
+    }
   }
 
   return newMessages;
